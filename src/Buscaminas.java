@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 public class Buscaminas {
 
-    private final char[][] tablero;
-    private final boolean[][] minas;
+    final char[][] tablero;
+    final boolean[][] minas;
     private final int filas;
     private final int columnas;
     private final int minasTotales;
@@ -52,7 +52,7 @@ public class Buscaminas {
         }
     }
     //En esta parte se lanza un output que indica cuando se toca una mina
-    private void revelarCasilla(int fila, int columna) {
+    void revelarCasilla(int fila, int columna) {
         if (minas[fila][columna]) {
             System.out.println("¡Boom! Has perdido.");
         }
@@ -66,7 +66,7 @@ public class Buscaminas {
         }
     }
     //Función para calcular las minas alrededor de una casilla
-    private int contarMinasAlrededor(int fila, int columna) {
+    int contarMinasAlrededor(int fila, int columna) {
         int minasAlrededor = 0;
 
         for (int i = fila - 1; i <= fila + 1; i++) {
@@ -88,23 +88,31 @@ public class Buscaminas {
         //Cabe destacar que inicialmente yo terminaba el bucle con un break cosa que posteriormente cambié pues es una mala práxis
         while (!juegoTerminado) {
             mostrarTablero();
-
-            System.out.print("Introduce la fila: ");
-            int fila = scanner.nextInt();
-
-            System.out.print("Introduce la columna: ");
-            int columna = scanner.nextInt();
-
+            int fila = obtenerEntradaUsuario("fila", scanner);
+            int columna = obtenerEntradaUsuario("columna", scanner);
             revelarCasilla(fila, columna);
-
-            if (tableroCompleto()) {
-                System.out.println("¡Felicidades! Has ganado.");
-                juegoTerminado = true;
-            }
+            juegoTerminado = verificarFinJuego() || haTocadoMina(fila, columna);
         }
+
+        scanner.close();
+    }
+
+    private int obtenerEntradaUsuario(String coordenada, Scanner scanner) {
+        System.out.print("Introduce la " + coordenada + ": ");
+        return scanner.nextInt();
+    }
+    private boolean haTocadoMina(int fila, int columna) {
+        return minas[fila][columna];
+    }
+    private boolean verificarFinJuego() {
+        if (tableroCompleto()) {
+            System.out.println("¡Felicidades! Has ganado.");
+            return true;
+        }
+        return false;
     }
     //Esta funcion determina si se han agotado las casillas sin minas y por ende se ha ganado el juego
-    private boolean tableroCompleto() {
+    boolean tableroCompleto() {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (tablero[i][j] == '-' && !minas[i][j]) {
