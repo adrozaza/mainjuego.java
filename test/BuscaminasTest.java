@@ -3,14 +3,14 @@ import org.junit.jupiter.api.Test;
 
 public class BuscaminasTest {
 
-
+    //Este test comprueba la funcion para colocar las minas
     @Test
     public void testContarMinasAlrededor() {
         Buscaminas buscaminas = new Buscaminas(5, 5, 0);
         buscaminas.minas[0][1] = true; // Colocar una mina en la casilla adyacente
         assertEquals(1, buscaminas.contarMinasAlrededor(0, 0)); // Asegura que se cuenten correctamente las minas adyacentes
     }
-
+    //Este test comprueba la generación del tablero
     @Test
     public void testTableroCompleto() {
         Buscaminas buscaminas = new Buscaminas(2, 2, 1);
